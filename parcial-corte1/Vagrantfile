@@ -1,0 +1,27 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "bento/ubuntu-22.04"
+
+  config.vm.define "maestro" do |m|
+    m.vm.hostname = "maestro.empresa.local"
+    m.vm.network "private_network", ip: "192.168.56.10"
+    m.vm.provision "shell", path: "provision/maestro.sh"
+    m.vm.provider "virtualbox" do |vb|
+    end
+  end
+
+  config.vm.define "esclavo" do |s|
+    s.vm.hostname = "esclavo.empresa.local"
+    s.vm.network "private_network", ip: "192.168.56.11"
+    s.vm.provision "shell", path: "provision/esclavo.sh"
+    s.vm.provider "virtualbox" do |vb|
+    end
+  end
+
+  config.vm.define "cliente" do |c|
+    c.vm.hostname = "cliente"
+    c.vm.network "private_network", ip: "192.168.56.12"
+    c.vm.provision "shell", path: "provision/cliente.sh"
+    c.vm.provider "virtualbox" do |vb|
+    end
+  end
+end
