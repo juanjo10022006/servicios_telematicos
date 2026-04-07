@@ -1,0 +1,46 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "bento/ubuntu-22.04"
+  config.vm.synced_folder ".", "/vagrant"
+
+  # =========================
+  # CLIENTE
+  # =========================
+  config.vm.define "cliente" do |cliente|
+    cliente.vm.hostname = "cliente"
+    cliente.vm.network "private_network", ip: "192.168.50.10"
+
+    cliente.vm.provider "virtualbox" do |vb|
+      vb.name = "cliente"
+    end
+
+    cliente.vm.provision "shell", path: "provision/cliente.sh"
+  end
+
+  # =========================
+  # SERVIDOR 1 - FIREWALL / UFW / NAT
+  # =========================
+  config.vm.define "servidor1" do |srv1|
+    srv1.vm.hostname = "servidor1"
+    srv1.vm.network "private_network", ip: "192.168.50.3"
+
+    srv1.vm.provider "virtualbox" do |vb|
+      vb.name = "servidor1"
+    end
+
+    srv1.vm.provision "shell", path: "provision/servidor1.sh"
+  end
+
+  # =========================
+  # SERVIDOR 2 - FTPS / SFTP
+  # =========================
+  config.vm.define "servidor2" do |srv2|
+    srv2.vm.hostname = "servidor2"
+    srv2.vm.network "private_network", ip: "192.168.50.2"
+
+    srv2.vm.provider "virtualbox" do |vb|
+      vb.name = "servidor2"
+    end
+
+    srv2.vm.provision "shell", path: "provision/servidor2.sh"
+  end
+end
